@@ -41,10 +41,11 @@ namespace NeuralNetwork.Networks
             for (int i = 0; i < Synapses.Length; i++)
             {
                 var sourceLayer = Neurons[i];
+                var targetLayer = Neurons[i + 1];
+
                 Synapses[i] = new Synapse[sourceLayer.Length][];
                 for (int j = 0; j < sourceLayer.Length; j++)
                 {
-                    var targetLayer = Neurons[i + 1];
                     Synapses[i][j] = new Synapse[targetLayer.Length];
                     for (int k = 0; k < targetLayer.Length; k++)
                     {
@@ -63,10 +64,11 @@ namespace NeuralNetwork.Networks
 
             for (int i = 0; i < Neurons.Length - 1; i++)
             {
+                var sourceLayer = Neurons[i];
                 var targetLayer = Neurons[i + 1];
+
                 for (int j = 0; j < targetLayer.Length; j++)
                 {
-                    var sourceLayer = Neurons[i];
                     double net = 0;
                     for (int k = 0; k < sourceLayer.Length; k++)
                     {
@@ -92,10 +94,11 @@ namespace NeuralNetwork.Networks
             for (int i = Neurons.Length - 2; i >= 1; i--)
             {
                 var sourceLayer = Neurons[i];
+                var targetLayer = Neurons[i + 1];
+
                 for (int j = 0; j < sourceLayer.Length; j++)
                 {
                     double net = 0;
-                    var targetLayer = Neurons[i + 1];
                     for (int k = 0; k < targetLayer.Length; k++)
                     {
                         net += targetLayer[k].Gradient * Synapses[i][j][k].Weight;
@@ -107,14 +110,15 @@ namespace NeuralNetwork.Networks
 
             for (int i = 0; i < Neurons.Length - 1; i++)
             {
+                var sourceLayer = Neurons[i];
                 var targetLayer = Neurons[i + 1];
+
                 for (int j = 0; j < targetLayer.Length; j++)
                 {
                     double prevDelta = targetLayer[j].BiasDelta;
                     targetLayer[j].BiasDelta = learnRate * targetLayer[j].Gradient;
                     targetLayer[j].Bias += targetLayer[j].BiasDelta + momentum * prevDelta;
 
-                    var sourceLayer = Neurons[i];
                     for (int k = 0; k < sourceLayer.Length; k++)
                     {
                         prevDelta = Synapses[i][k][j].WeightDelta;
